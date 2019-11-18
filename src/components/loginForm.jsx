@@ -4,7 +4,7 @@ import Input from "./common/input";
 
 class LoginForm extends Component {
   state = {
-    account: { username: "", password: "" },
+    data: { username: "", password: "" },
     errors: {}
   };
 
@@ -17,9 +17,11 @@ class LoginForm extends Component {
       .label("Password")
   };
 
+  // replaced in reusable component
+  /* 
   validate = () => {
     const options = { abortEarly: false };
-    const { error } = Joi.validate(this.state.account, this.schema, options);
+    const { error } = Joi.validate(this.state.data, this.schema, options);
     if (!error) return null;
 
     const errors = {};
@@ -28,18 +30,18 @@ class LoginForm extends Component {
     return errors;
 
     //validation by hand
-    /*
+    
     const errors = {};
 
-    const { account } = this.state;
-    if (account.username.trim() === "")
+    const { data } = this.state;
+    if (data.username.trim() === "")
       errors.username = "Username is required";
-    if (account.password.trim() === "")
+    if (data.password.trim() === "")
       errors.password = "Password is required";
 
     return Object.keys(errors).length === 0 ? null : errors;
-    */
-  };
+    
+  };*/
 
   handleSubmit = e => {
     e.preventDefault();
@@ -51,7 +53,11 @@ class LoginForm extends Component {
     console.log("Submited");
   };
 
+  //replaced in reusable component
+  /*
   validateProperty = ({ name, value }) => {
+    // validation of each field at the run time manually
+    
     if (name === "username") {
       if (value.trim() === "") return "Username is required";
       //... we can have more rules here
@@ -60,7 +66,16 @@ class LoginForm extends Component {
       if (value.trim() === "") return "Password is required";
       //... we can have more rules here
     }
-  };
+
+    // property validation with Joi
+    const obj = { [name]: value };
+    const schema = { [name]: this.schema[name] };
+    const { error } = Joi.validate(obj, schema);
+    return error ? error.details[0].message : null;
+    //same as return error ? error.details[0].message : null;
+    // if (error) return null;
+    // return error.details[0].message;
+  };*/
 
   handleChange = ({ currentTarget: input }) => {
     const errors = { ...this.state.errors };
@@ -68,13 +83,13 @@ class LoginForm extends Component {
     if (errorMessage) errors[input.name] = errorMessage;
     else delete errors[input.name];
 
-    const account = { ...this.state.account };
-    account[input.name] = input.value;
-    this.setState({ account, errors });
+    const data = { ...this.state.data };
+    data[input.name] = input.value;
+    this.setState({ data, errors });
   };
 
   render() {
-    const { account, errors } = this.state;
+    const { data, errors } = this.state;
 
     return (
       <div>
@@ -82,19 +97,21 @@ class LoginForm extends Component {
         <form onSubmit={this.handleSubmit}>
           <Input
             name="username"
-            value={account.username}
+            value={data.username}
             label="Username"
             onChange={this.handleChange}
             error={errors.username}
           ></Input>
           <Input
             name="password"
-            value={account.password}
+            value={data.password}
             label="Password"
             onChange={this.handleChange}
             error={errors.password}
           ></Input>
-          <button className="btn btn-primary">Login</button>
+          <button disabled={this.validate()} className="btn btn-primary">
+            Login
+          </button>
         </form>
       </div>
     );
