@@ -8,6 +8,10 @@ body {
   margin-bottom: 30px;
 }
 
+.newMovieButton {
+  margin-bottom: 10px;
+}
+
 .clickable {
   cursor: pointer;
 }

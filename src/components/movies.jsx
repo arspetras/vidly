@@ -85,6 +85,7 @@ class Movies extends Component {
           ></ListGroup>
         </div>
         <div className="col">
+          <button className="btn btn-primary newMovieButton">New Movie</button>
           <p>Movies: {totalCount}</p>
           <MoviesTable
             movies={movies}
