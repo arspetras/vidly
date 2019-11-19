@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import Joi from "joi-browser";
-import Input from "./common/input";
+import Form from "./common/form";
 
-class LoginForm extends Component {
+class LoginForm extends Form {
   state = {
     data: { username: "", password: "" },
     errors: {}
@@ -43,13 +43,8 @@ class LoginForm extends Component {
     
   };*/
 
-  handleSubmit = e => {
-    e.preventDefault();
-
-    const errors = this.validate();
-    this.setState({ errors: errors || {} });
-    if (errors) return;
-
+  doSubmit = () => {
+    //call the server
     console.log("Submited");
   };
 
@@ -77,41 +72,14 @@ class LoginForm extends Component {
     // return error.details[0].message;
   };*/
 
-  handleChange = ({ currentTarget: input }) => {
-    const errors = { ...this.state.errors };
-    const errorMessage = this.validateProperty(input);
-    if (errorMessage) errors[input.name] = errorMessage;
-    else delete errors[input.name];
-
-    const data = { ...this.state.data };
-    data[input.name] = input.value;
-    this.setState({ data, errors });
-  };
-
   render() {
-    const { data, errors } = this.state;
-
     return (
       <div>
         <h1>Login</h1>
         <form onSubmit={this.handleSubmit}>
-          <Input
-            name="username"
-            value={data.username}
-            label="Username"
-            onChange={this.handleChange}
-            error={errors.username}
-          ></Input>
-          <Input
-            name="password"
-            value={data.password}
-            label="Password"
-            onChange={this.handleChange}
-            error={errors.password}
-          ></Input>
-          <button disabled={this.validate()} className="btn btn-primary">
-            Login
-          </button>
+          {this.renderInput("username", "Username")}
+          {this.renderInput("password", "Password", "password")}
+          {this.renderButton("Login")}
         </form>
       </div>
     );
