@@ -97,6 +97,7 @@ class Movies extends Component {
   render() {
     const { length: count } = this.state.movies;
     const { pageSize, currentPage, sortColumn } = this.state;
+    const { user } = this.props;
 
     if (count === 0) return <p>There are no movies in the database</p>;
 
@@ -113,9 +114,11 @@ class Movies extends Component {
         </div>
         <div className="col">
           {/*New Movie button which takes us to movie form where we able to add new movie */}
-          <Link className="btn btn-primary newMovieButton" to="/movies/new">
-            New Movie
-          </Link>
+          {user && (
+            <Link className="btn btn-primary newMovieButton" to="/movies/new">
+              New Movie
+            </Link>
+          )}
           <p>Movies: {totalCount}</p>
           {/*Search bar*/}
           <SearchBox
